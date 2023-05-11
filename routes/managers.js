@@ -12,8 +12,9 @@ router.get("/employees/:id", async (req, res) => { // Get an employee
     res.status(200).send(rows);
 });
 
-router.post("/employees", (req, res) => {
-    res.send("Add new employee");
+router.post("/employees", async (req, res) => { // Add new employee
+    const {rows} = await db.query("INSERT INTO employees(first_name, last_name) VALUES($1, $2) RETURNING id, first_name, last_name", [req.body.first_name, req.body.last_name]);
+    res.status(201).send(rows);
 });
 
 router.patch("/employees/:id", (req, res) => {
